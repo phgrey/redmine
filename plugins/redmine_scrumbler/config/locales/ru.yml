@@ -1,0 +1,80 @@
+# Russian strings go here for Rails i18n
+ru:
+  versions_for_sprints_not_created: "Для создания спринтов используйте версии проекта. Настройки -> Версии."
+  field_end_date: "Окончание"
+  field_fact_close_date: "Фактическая дата завершения"
+  field_max_points: "Max Points"
+  scrumbler_menu: "Скрамблер"
+  scrumbler_sprint: "Спринт"
+  
+  show_opened: "Только открытые"
+  show_all: "Все спринты"
+  label_general: "Основные"
+  label_sprints: "Спринты"
+  label_new_sprint: "Новый спринт:"
+  label_trackers: "Трекеры"
+  label_issue_statuses: "Статусы задач"
+  label_sprint_back: "Вернуться в спринт"
+  label_backlog: "Бэклог"
+  label_sprint_settings: "Настройки спринта"
+  label_statistics: "Статистика"
+  label_confirm_sprint_opening: "Вы уверены, что хотите открыть спринт?"
+  label_header_error: "Ошибка"
+  label_header_warning: "Предупреждение"
+  issue_action_on_sprint_closing: "Что делать с незакрытыми задачами?"
+  close_issues: "Закрыть все задачи в спринте"
+  move_issues_to_backlog: "Переместить в бэклог"
+  opened_issues_in_closing_sprint: "В спринте есть незакрытые задачи!"
+  
+  issue_not_assigned: "Не назначена"
+  
+  tracker_use?: "Использовать?"
+  error_scrumbler_general_update: "Не удалось обновить настройки "
+  error_scrumbler_trackers_update: "Не удалось обновить трекеры "
+  error_scrumbler_issue_statuses_update: "Не удалось обновить статусы задач"
+  error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
+  error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
+  error_sprint_not_found: "Спринт не найден"
+  
+  scrumbler_points_field: "Поле Points"
+  
+  scrumbler_statistics:
+    ideal_issues: "Идеал"
+    actual_issues: "Факт"
+    iteration_axis: "Продолжительность итерации"
+    estimated_axis: "Оставшаяся работа"
+    
+  scrumbler_sprint_statistics_not_available: "Внимание! Статистика недоступна. Спринт должен быть открыт и заданы даты начала окончания спринта."
+  
+  scrumbler_sprint_opened: "Открыт"
+  scrumbler_sprint_planning: "Планирование"
+  scrumbler_sprint_closed: "Закрыт"
+  
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Трекер не активен для данного спринта"
+              sprint_not_planning_error: "Задачу можно добавить только в спринт находящийся в статусе планирование"
+              sprint_is_closed_error: "Нельзя редактировать задачу, находящуюся в закрытом спринте"
+              sprint_points_limit_error: "Превышен лимит Points"
+        scrumbler_sprint:
+          attributes:
+            base:
+              start_date_is_greater_than_end_date: "Дата окончания спринта не может быть раньше даты начала спринта"
+              trackers_with_issues_in_sprint_cant_be_removed: "Нельзя отключить трекер, в котором есть задачи"
+              sprint_without_project: "Нельзя создать спринт без проекта"
+              closing_sprint_with_opened_issues: "Нельзя закрыть спринт, если в нем есть незакрытые задачи"
+              cant_open_sprint_without_issues: "Нельзя открыть спринт без задач"
+              sprint_points_limit_error: "Превышен лимит Points"
+            status:
+              only_one_opened: "Только один спринт может быть открыт в проекте"
+  active_record:
+    models:
+      scrumbler_sprint_tracker:
+        position: "Приоритет"
+        color: "Цвет"
+      scrumbler_sprint_status:
+        position: "Приоритет"

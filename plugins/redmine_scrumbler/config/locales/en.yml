@@ -1,0 +1,78 @@
+en:
+  versions_for_sprints_not_created: "For sprint creation use project versions. Settings -> Versions."
+  field_end_date: "End date"
+  field_fact_close_date: "Fact close date"
+  field_max_points: "Max Points"
+  scrumbler_menu: "Scrumbler"
+  scrumbler_sprint: "Sprint"
+  scrumbler_points_field: "Scrum Points"
+
+  show_opened: "Show Opened"
+  show_all: "All Sprints"
+  label_general: "General"
+  label_sprints: "Sprints"
+  label_new_sprint: "New sprint:"
+  label_trackers: "Trackers"
+  label_issue_statuses: "Issue statuses"
+  label_sprint_back: "Back to sprint"
+  label_backlog: "Backlog"
+  label_sprint_settings: "Sprint settings"
+  label_statistics: "Statistics"
+  label_confirm_sprint_opening: "Are you sure you want to open a sprint?"
+  label_header_error: "Error"
+  label_header_warning: "Warning"
+  issue_action_on_sprint_closing: "What to do with not closed issues?"
+  close_issues: "Close all issues in sprint"
+  move_issues_to_backlog: "Move to backlog"
+  opened_issues_in_closing_sprint: "There are some not closed issues in sprint"
+  
+  issue_not_assigned: "Not assigned"
+  
+  tracker_use?: "Use?"
+  error_scrumbler_general_update: "Settings update failed"
+  error_scrumbler_trackers_update: "Trackers update failed"
+  error_scrumbler_issue_statuses_update: "Issue statuses update failed"
+  error_sprint_not_found_in_project: "Sprint not found in project"
+  error_scrumbler_issue_status_change: "You dont have permissions to change status \"%{status_name}\" for this issue"
+  error_sprint_not_found: "Sprint not found"
+  
+  scrumbler_statistics:
+    ideal_issues: "Ideal"
+    actual_issues: "Actual"
+    iteration_axis: "Iteration timeline"
+    estimated_axis: "Estimated work"
+  
+  scrumbler_sprint_statistics_not_available: "Warning! Statistics not available. Sprint must be opened and provided start and end date for sprint."
+  
+  scrumbler_sprint_opened: "Opened"
+  scrumbler_sprint_planning: "Planning"
+  scrumbler_sprint_closed: "Closed"
+  
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Tracker doesn's exist in this sprint"
+              sprint_not_planning_error: "Issue can be assigned to planning sprint only"
+              sprint_is_closed_error: "Can't edit issue in closed sprint"
+              sprint_points_limit_error: "Scrum points limit exceeded"
+        scrumbler_sprint:
+          attributes:
+            base:
+              start_date_is_greater_than_end_date: "Start date can't be greater than end date"
+              trackers_with_issues_in_sprint_cant_be_removed: "Can't remove tracker from sprint. Tracker is not empty"
+              sprint_without_project: "Can't create sprint without project"
+              closing_sprint_with_opened_issues: "Can't close sprint with opened issues"
+              cant_open_sprint_without_issues: "Cant open sprint without issues"
+              sprint_points_limit_error: "Scrum points limit exceeded"
+            status:
+              only_one_opened: "error. Only one sprint can be opened a in the project"
+  active_record:
+    models:
+      scrumbler_sprint_tracker:
+        position: "Position"
+        color: "Color"
+      scrumbler_sprint_status:
+        position: "Position"

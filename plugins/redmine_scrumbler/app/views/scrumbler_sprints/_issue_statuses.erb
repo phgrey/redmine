@@ -1,0 +1,27 @@
+<%= form_tag :controller => :scrumbler_sprints, :action => :update_issue_statuses, :project_id => @project, :id => @scrumbler_sprint.id do%>
+  <table class="list">
+    <thead>
+      <tr>
+        <th align="left"><%=l :label_issue_status_plural %></th>
+        <th width="100px"><%=l :tracker_use?%></th>
+        <th width="100px"><%=t "active_record.models.scrumbler_sprint_status.position" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @issue_statuses.each do |issue_status| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td><%=issue_status.name%></td>
+          <td align="center">
+            <%= check_box_tag "scrumbler_sprint[issue_statuses][#{issue_status.id}][use]", 
+              true, 
+              @enabled_statuses.has_key?(issue_status.id.to_s)
+          %>
+          </td>
+          <td>
+            <%= text_field_tag "scrumbler_sprint[issue_statuses][#{issue_status.id}][position]",  @enabled_statuses[issue_status.id.to_s].try("[]", :position), :size => 3%> </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p><%= submit_tag(l(:button_save)) %></p>
+<% end %>

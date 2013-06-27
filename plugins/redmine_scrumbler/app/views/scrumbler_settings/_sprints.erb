@@ -1,0 +1,24 @@
+<table class="list">
+	<thead>
+		<tr>
+			<th><%= l :scrumbler_sprint %></th>
+			<th width="100px"><%= label("scrumbler_sprint", "status")%></th>
+			<% if authorize_for(:scrumbler_sprints, :settings)%> 
+				<th width="100px"><%= label("scrumbler_sprint","action")%></th>
+			<%end%>
+		</tr>
+	</thead>
+	<tbody>
+		<% @project.scrumbler_sprints.each do |sprint| %>
+		<tr class="<%= cycle 'odd', 'even' %>">
+			<td>
+			<%= link_to sprint.name, {:controller => :scrumbler, :action => :index, :project_id => @project, :scrumbler_sprint_id => sprint.id} %>	
+			</td>
+			<td><%= l("scrumbler_sprint_#{sprint.status}") %></td>
+			<% if authorize_for(:scrumbler_sprints, :settings)%> 
+				<td><%= link_to l(:button_edit), {:controller => :scrumbler_sprints, :action => :settings, :project_id => @project, :id => sprint.id}, :class=> "icon icon-scrumbler-settings" %></td>
+			<%end%>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

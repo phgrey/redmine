@@ -1,0 +1,33 @@
+<%= form_tag :controller => :scrumbler_sprints, :action => :update_trackers, :project_id => @project, :id => @scrumbler_sprint.id do%>
+  <table class="list">
+    <thead>
+      <tr>
+        <th align="left"><%=l :label_tracker_plural %></th>
+        <th width="100px"><%=l "active_record.models.scrumbler_sprint_tracker.color"%></th>
+        <th width="100px"><%=l :label_tracker_plural%></th>
+        <th width="100px"><%=t "active_record.models.scrumbler_sprint_tracker.position" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @trackers.each do |tracker| %>
+        <% existing_tracker = @enabled_trackers[tracker.id.to_s] %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td><%= tracker.name%></td>
+          <td><%= select_color_tag("scrumbler_sprint[trackers][#{tracker.id}][color]", existing_tracker.try("[]", :color), {:default_color=>"FAA"}) %>
+          </td>
+
+          <td align="center">
+            <%= check_box_tag "scrumbler_sprint[trackers][#{tracker.id}][use]", 
+              true, 
+              !!existing_tracker  
+          %>
+          </td>
+          <td>
+            <%= text_field_tag "scrumbler_sprint[trackers][#{tracker.id}][position]",  existing_tracker.try("[]", :position), :size => 3%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p><%= submit_tag(l(:button_save)) %></p>
+<% end %>
