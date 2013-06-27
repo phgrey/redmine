@@ -101,7 +101,7 @@ module Redmine #:nodoc:
     # Finds a plugin by its id
     # Returns a PluginNotFound exception if the plugin doesn't exist
     def self.find(id)
-      registered_plugins[id.to_sym] || raise(PluginNotFound)
+      registered_plugins[id.to_sym] ||registered_plugins[id] || raise(PluginNotFound)
     end
 
     # Clears the registered plugins hash
