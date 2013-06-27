@@ -12,11 +12,11 @@ var Droppables = {
   drops: [],
 
   remove: function(element) {
-    this.drops = this.drops.reject(function(d) { return d.element==$(element) });
+    this.drops = this.drops.reject(function(d) { return d.element==$p(element) });
   },
 
   add: function(element) {
-    element = $(element);
+    element = $p(element);
     var options = Object.extend({
       greedy:     true,
       hoverclass: null,
@@ -28,9 +28,9 @@ var Droppables = {
       options._containers = [];
       var containment = options.containment;
       if(Object.isArray(containment)) {
-        containment.each( function(c) { options._containers.push($(c)) });
+        containment.each( function(c) { options._containers.push($p(c)) });
       } else {
-        options._containers.push($(containment));
+        options._containers.push($p(containment));
       }
     }
 
@@ -263,16 +263,16 @@ var Draggable = Class.create({
 
     var options = Object.extend(defaults, arguments[1] || { });
 
-    this.element = $(element);
+    this.element = $p(element);
 
     if(options.handle && Object.isString(options.handle))
       this.handle = this.element.down('.'+options.handle, 0);
 
-    if(!this.handle) this.handle = $(options.handle);
+    if(!this.handle) this.handle = $p(options.handle);
     if(!this.handle) this.handle = this.element;
 
     if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML) {
-      options.scroll = $(options.scroll);
+      options.scroll = $p(options.scroll);
       this._isScrollChild = Element.childOf(this.element, options.scroll);
     }
 
@@ -574,7 +574,7 @@ Draggable._dragging = { };
 
 var SortableObserver = Class.create({
   initialize: function(element, observer) {
-    this.element   = $(element);
+    this.element   = $p(element);
     this.observer  = observer;
     this.lastValue = Sortable.serialize(this.element);
   },
@@ -603,13 +603,13 @@ var Sortable = {
   },
 
   options: function(element) {
-    element = Sortable._findRootElement($(element));
+    element = Sortable._findRootElement($p(element));
     if(!element) return;
     return Sortable.sortables[element.id];
   },
 
   destroy: function(element){
-    element = $(element);
+    element = $p(element);
     var s = Sortable.sortables[element.id];
 
     if(s) {
@@ -622,7 +622,7 @@ var Sortable = {
   },
 
   create: function(element) {
-    element = $(element);
+    element = $p(element);
     var options = Object.extend({
       element:     element,
       tag:         'li',       // assumes li children, override with tag: 'tagname'
@@ -713,8 +713,8 @@ var Sortable = {
     }
 
     (options.elements || this.findElements(element, options) || []).each( function(e,i) {
-      var handle = options.handles ? $(options.handles[i]) :
-        (options.handle ? $(e).select('.' + options.handle)[0] : e);
+      var handle = options.handles ? $p(options.handles[i]) :
+        (options.handle ? $p(e).select('.' + options.handle)[0] : e);
       options.draggables.push(
         new Draggable(e, Object.extend(options_for_draggable, { handle: handle })));
       Droppables.add(e, options_for_droppable);
@@ -822,7 +822,7 @@ var Sortable = {
 
     if(!Sortable._marker) {
       Sortable._marker =
-        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
+        ($p('dropmarker') || Element.extend(document.createElement('DIV'))).
           hide().addClassName('dropmarker').setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
@@ -852,7 +852,7 @@ var Sortable = {
         parent: parent,
         children: [],
         position: parent.children.length,
-        container: $(children[i]).down(options.treeTag)
+        container: $p(children[i]).down(options.treeTag)
       };
 
       /* Get the element containing the children and recurse over it */
@@ -866,7 +866,7 @@ var Sortable = {
   },
 
   tree: function(element) {
-    element = $(element);
+    element = $p(element);
     var sortableOptions = this.options(element);
     var options = Object.extend({
       tag: sortableOptions.tag,
@@ -897,16 +897,16 @@ var Sortable = {
   },
 
   sequence: function(element) {
-    element = $(element);
+    element = $p(element);
     var options = Object.extend(this.options(element), arguments[1] || { });
 
-    return $(this.findElements(element, options) || []).map( function(item) {
+    return $p(this.findElements(element, options) || []).map( function(item) {
       return item.id.match(options.format) ? item.id.match(options.format)[1] : '';
     });
   },
 
   setSequence: function(element, new_sequence) {
-    element = $(element);
+    element = $p(element);
     var options = Object.extend(this.options(element), arguments[2] || { });
 
     var nodeMap = { };
@@ -926,7 +926,7 @@ var Sortable = {
   },
 
   serialize: function(element) {
-    element = $(element);
+    element = $p(element);
     var options = Object.extend(Sortable.options(element), arguments[1] || { });
     var name = encodeURIComponent(
       (arguments[1] && arguments[1].name) ? arguments[1].name : element.id);

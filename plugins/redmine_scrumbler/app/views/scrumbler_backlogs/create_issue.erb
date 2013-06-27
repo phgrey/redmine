@@ -7,6 +7,6 @@
     <p><%= f.text_field :subject, :size => 80, :required => true %></p>
 	<%= render :partial => 'issues/form_custom_fields'%>
 	<%= f.submit%>
-	<%= button_to_function(l(:button_cancel), "$(this.parentNode.parentNode).hide(); return false;")%>
+	<%= button_to_function(l(:button_cancel), "$p(this.parentNode.parentNode).hide(); return false;")%>
     <%= javascript_tag "Form.Element.focus('issue_subject');" %>
 <% end %>

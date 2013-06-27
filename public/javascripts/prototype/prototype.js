@@ -1760,7 +1760,7 @@ Ajax.Updater = Class.create(Ajax.Request, {
 
     if (!options.evalScripts) responseText = responseText.stripScripts();
 
-    if (receiver = $(receiver)) {
+    if (receiver = $p(receiver)) {
       if (options.insertion) {
         if (Object.isString(options.insertion)) {
           var insertion = { }; insertion[options.insertion] = responseText;
@@ -1815,10 +1815,10 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 });
 
 
-function $(element) {
+function $p(element) {
   if (arguments.length > 1) {
     for (var i = 0, elements = [], length = arguments.length; i < length; i++)
-      elements.push($(arguments[i]));
+      elements.push($p(arguments[i]));
     return elements;
   }
   if (Object.isString(element))
@@ -1829,7 +1829,7 @@ function $(element) {
 if (Prototype.BrowserFeatures.XPath) {
   document._getElementsByXPath = function(expression, parentElement) {
     var results = [];
-    var query = document.evaluate(expression, $(parentElement) || document,
+    var query = document.evaluate(expression, $p(parentElement) || document,
       null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0, length = query.snapshotLength; i < length; i++)
       results.push(Element.extend(query.snapshotItem(i)));
@@ -1917,29 +1917,29 @@ Element._purgeElement = function(element) {
 
 Element.Methods = {
   visible: function(element) {
-    return $(element).style.display != 'none';
+    return $p(element).style.display != 'none';
   },
 
   toggle: function(element) {
-    element = $(element);
+    element = $p(element);
     Element[Element.visible(element) ? 'hide' : 'show'](element);
     return element;
   },
 
   hide: function(element) {
-    element = $(element);
+    element = $p(element);
     element.style.display = 'none';
     return element;
   },
 
   show: function(element) {
-    element = $(element);
+    element = $p(element);
     element.style.display = '';
     return element;
   },
 
   remove: function(element) {
-    element = $(element);
+    element = $p(element);
     element.parentNode.removeChild(element);
     return element;
   },
@@ -2002,7 +2002,7 @@ Element.Methods = {
 
 
     function update(element, content) {
-      element = $(element);
+      element = $p(element);
       var purgeElement = Element._purgeElement;
 
       var descendants = element.getElementsByTagName('*'),
@@ -2056,7 +2056,7 @@ Element.Methods = {
   })(),
 
   replace: function(element, content) {
-    element = $(element);
+    element = $p(element);
     if (content && content.toElement) content = content.toElement();
     else if (!Object.isElement(content)) {
       content = Object.toHTML(content);
@@ -2070,7 +2070,7 @@ Element.Methods = {
   },
 
   insert: function(element, insertions) {
-    element = $(element);
+    element = $p(element);
 
     if (Object.isString(insertions) || Object.isNumber(insertions) ||
         Object.isElement(insertions) || (insertions && (insertions.toElement || insertions.toHTML)))
@@ -2106,9 +2106,9 @@ Element.Methods = {
   },
 
   wrap: function(element, wrapper, attributes) {
-    element = $(element);
+    element = $p(element);
     if (Object.isElement(wrapper))
-      $(wrapper).writeAttribute(attributes || { });
+      $p(wrapper).writeAttribute(attributes || { });
     else if (Object.isString(wrapper)) wrapper = new Element(wrapper, attributes);
     else wrapper = new Element('div', wrapper);
     if (element.parentNode)
@@ -2118,7 +2118,7 @@ Element.Methods = {
   },
 
   inspect: function(element) {
-    element = $(element);
+    element = $p(element);
     var result = '<' + element.tagName.toLowerCase();
     $H({'id': 'id', 'className': 'class'}).each(function(pair) {
       var property = pair.first(),
@@ -2130,7 +2130,7 @@ Element.Methods = {
   },
 
   recursivelyCollect: function(element, property, maximumLength) {
-    element = $(element);
+    element = $p(element);
     maximumLength = maximumLength || -1;
     var elements = [];
 
@@ -2153,13 +2153,13 @@ Element.Methods = {
   },
 
   firstDescendant: function(element) {
-    element = $(element).firstChild;
+    element = $p(element).firstChild;
     while (element && element.nodeType != 1) element = element.nextSibling;
-    return $(element);
+    return $p(element);
   },
 
   immediateDescendants: function(element) {
-    var results = [], child = $(element).firstChild;
+    var results = [], child = $p(element).firstChild;
     while (child) {
       if (child.nodeType === 1) {
         results.push(Element.extend(child));
@@ -2178,35 +2178,35 @@ Element.Methods = {
   },
 
   siblings: function(element) {
-    element = $(element);
+    element = $p(element);
     return Element.previousSiblings(element).reverse()
       .concat(Element.nextSiblings(element));
   },
 
   match: function(element, selector) {
-    element = $(element);
+    element = $p(element);
     if (Object.isString(selector))
       return Prototype.Selector.match(element, selector);
     return selector.match(element);
   },
 
   up: function(element, expression, index) {
-    element = $(element);
-    if (arguments.length == 1) return $(element.parentNode);
+    element = $p(element);
+    if (arguments.length == 1) return $p(element.parentNode);
     var ancestors = Element.ancestors(element);
     return Object.isNumber(expression) ? ancestors[expression] :
       Prototype.Selector.find(ancestors, expression, index);
   },
 
   down: function(element, expression, index) {
-    element = $(element);
+    element = $p(element);
     if (arguments.length == 1) return Element.firstDescendant(element);
     return Object.isNumber(expression) ? Element.descendants(element)[expression] :
       Element.select(element, expression)[index || 0];
   },
 
   previous: function(element, expression, index) {
-    element = $(element);
+    element = $p(element);
     if (Object.isNumber(expression)) index = expression, expression = false;
     if (!Object.isNumber(index)) index = 0;
 
@@ -2218,7 +2218,7 @@ Element.Methods = {
   },
 
   next: function(element, expression, index) {
-    element = $(element);
+    element = $p(element);
     if (Object.isNumber(expression)) index = expression, expression = false;
     if (!Object.isNumber(index)) index = 0;
 
@@ -2232,28 +2232,28 @@ Element.Methods = {
 
 
   select: function(element) {
-    element = $(element);
+    element = $p(element);
     var expressions = Array.prototype.slice.call(arguments, 1).join(', ');
     return Prototype.Selector.select(expressions, element);
   },
 
   adjacent: function(element) {
-    element = $(element);
+    element = $p(element);
     var expressions = Array.prototype.slice.call(arguments, 1).join(', ');
     return Prototype.Selector.select(expressions, element.parentNode).without(element);
   },
 
   identify: function(element) {
-    element = $(element);
+    element = $p(element);
     var id = Element.readAttribute(element, 'id');
     if (id) return id;
-    do { id = 'anonymous_element_' + Element.idCounter++ } while ($(id));
+    do { id = 'anonymous_element_' + Element.idCounter++ } while ($p(id));
     Element.writeAttribute(element, 'id', id);
     return id;
   },
 
   readAttribute: function(element, name) {
-    element = $(element);
+    element = $p(element);
     if (Prototype.Browser.IE) {
       var t = Element._attributeTranslations.read;
       if (t.values[name]) return t.values[name](element, name);
@@ -2267,7 +2267,7 @@ Element.Methods = {
   },
 
   writeAttribute: function(element, name, value) {
-    element = $(element);
+    element = $p(element);
     var attributes = { }, t = Element._attributeTranslations.write;
 
     if (typeof name == 'object') attributes = name;
@@ -2299,34 +2299,34 @@ Element.Methods = {
   },
 
   hasClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     var elementClassName = element.className;
     return (elementClassName.length > 0 && (elementClassName == className ||
       new RegExp("(^|\\s)" + className + "(\\s|$)").test(elementClassName)));
   },
 
   addClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     if (!Element.hasClassName(element, className))
       element.className += (element.className ? ' ' : '') + className;
     return element;
   },
 
   removeClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     element.className = element.className.replace(
       new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' ').strip();
     return element;
   },
 
   toggleClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     return Element[Element.hasClassName(element, className) ?
       'removeClassName' : 'addClassName'](element, className);
   },
 
   cleanWhitespace: function(element) {
-    element = $(element);
+    element = $p(element);
     var node = element.firstChild;
     while (node) {
       var nextNode = node.nextSibling;
@@ -2338,11 +2338,11 @@ Element.Methods = {
   },
 
   empty: function(element) {
-    return $(element).innerHTML.blank();
+    return $p(element).innerHTML.blank();
   },
 
   descendantOf: function(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
+    element = $p(element), ancestor = $p(ancestor);
 
     if (element.compareDocumentPosition)
       return (element.compareDocumentPosition(ancestor) & 8) === 8;
@@ -2357,14 +2357,14 @@ Element.Methods = {
   },
 
   scrollTo: function(element) {
-    element = $(element);
+    element = $p(element);
     var pos = Element.cumulativeOffset(element);
     window.scrollTo(pos[0], pos[1]);
     return element;
   },
 
   getStyle: function(element, style) {
-    element = $(element);
+    element = $p(element);
     style = style == 'float' ? 'cssFloat' : style.camelize();
     var value = element.style[style];
     if (!value || value == 'auto') {
@@ -2376,11 +2376,11 @@ Element.Methods = {
   },
 
   getOpacity: function(element) {
-    return $(element).getStyle('opacity');
+    return $p(element).getStyle('opacity');
   },
 
   setStyle: function(element, styles) {
-    element = $(element);
+    element = $p(element);
     var elementStyle = element.style, match;
     if (Object.isString(styles)) {
       element.style.cssText += ';' + styles;
@@ -2398,14 +2398,14 @@ Element.Methods = {
   },
 
   setOpacity: function(element, value) {
-    element = $(element);
+    element = $p(element);
     element.style.opacity = (value == 1 || value === '') ? '' :
       (value < 0.00001) ? 0 : value;
     return element;
   },
 
   makePositioned: function(element) {
-    element = $(element);
+    element = $p(element);
     var pos = Element.getStyle(element, 'position');
     if (pos == 'static' || !pos) {
       element._madePositioned = true;
@@ -2419,7 +2419,7 @@ Element.Methods = {
   },
 
   undoPositioned: function(element) {
-    element = $(element);
+    element = $p(element);
     if (element._madePositioned) {
       element._madePositioned = undefined;
       element.style.position =
@@ -2432,7 +2432,7 @@ Element.Methods = {
   },
 
   makeClipping: function(element) {
-    element = $(element);
+    element = $p(element);
     if (element._overflow) return element;
     element._overflow = Element.getStyle(element, 'overflow') || 'auto';
     if (element._overflow !== 'hidden')
@@ -2441,7 +2441,7 @@ Element.Methods = {
   },
 
   undoClipping: function(element) {
-    element = $(element);
+    element = $p(element);
     if (!element._overflow) return element;
     element.style.overflow = element._overflow == 'auto' ? '' : element._overflow;
     element._overflow = null;
@@ -2458,10 +2458,10 @@ Element.Methods = {
       offsetLeft: 0
     }, arguments[2] || { });
 
-    source = $(source);
+    source = $p(source);
     var p = Element.viewportOffset(source), delta = [0, 0], parent = null;
 
-    element = $(element);
+    element = $p(element);
 
     if (Element.getStyle(element, 'position') == 'absolute') {
       parent = Element.getOffsetParent(element);
@@ -2537,7 +2537,7 @@ if (Prototype.Browser.Opera) {
 
 else if (Prototype.Browser.IE) {
   Element.Methods.getStyle = function(element, style) {
-    element = $(element);
+    element = $p(element);
     style = (style == 'float' || style == 'cssFloat') ? 'styleFloat' : style.camelize();
     var value = element.style[style];
     if (!value && element.currentStyle) value = element.currentStyle[style];
@@ -2560,7 +2560,7 @@ else if (Prototype.Browser.IE) {
     function stripAlpha(filter){
       return filter.replace(/alpha\([^\)]*\)/gi,'');
     }
-    element = $(element);
+    element = $p(element);
     var currentStyle = element.currentStyle;
     if ((currentStyle && !currentStyle.hasLayout) ||
       (!currentStyle && element.style.zoom == 'normal'))
@@ -2649,7 +2649,7 @@ else if (Prototype.Browser.IE) {
             return f;
           })(),
           _flag: function(element, attribute) {
-            return $(element).hasAttribute(attribute) ? attribute : null;
+            return $p(element).hasAttribute(attribute) ? attribute : null;
           },
           style: function(element) {
             return element.style.cssText.toLowerCase();
@@ -2728,7 +2728,7 @@ else if (Prototype.Browser.IE) {
       }
 
       Element.Methods.down = function(element, expression, index) {
-        element = $(element);
+        element = $p(element);
         if (arguments.length == 1) return element.firstDescendant();
         return Object.isNumber(expression) ? _descendants(element)[expression] :
           Element.select(element, expression)[index || 0];
@@ -2740,7 +2740,7 @@ else if (Prototype.Browser.IE) {
 
 else if (Prototype.Browser.Gecko && /rv:1\.8\.0/.test(navigator.userAgent)) {
   Element.Methods.setOpacity = function(element, value) {
-    element = $(element);
+    element = $p(element);
     element.style.opacity = (value == 1) ? 0.999999 :
       (value === '') ? '' : (value < 0.00001) ? 0 : value;
     return element;
@@ -2749,7 +2749,7 @@ else if (Prototype.Browser.Gecko && /rv:1\.8\.0/.test(navigator.userAgent)) {
 
 else if (Prototype.Browser.WebKit) {
   Element.Methods.setOpacity = function(element, value) {
-    element = $(element);
+    element = $p(element);
     element.style.opacity = (value == 1 || value === '') ? '' :
       (value < 0.00001) ? 0 : value;
 
@@ -2768,7 +2768,7 @@ else if (Prototype.Browser.WebKit) {
 
 if ('outerHTML' in document.documentElement) {
   Element.Methods.replace = function(element, content) {
-    element = $(element);
+    element = $p(element);
 
     if (content && content.toElement) content = content.toElement();
     if (Object.isElement(content)) {
@@ -2860,7 +2860,7 @@ Element._insertionTranslations = {
 Element.Methods.Simulated = {
   hasAttribute: function(element, attribute) {
     attribute = Element._attributeTranslations.has[attribute] || attribute;
-    var node = $(element).getAttributeNode(attribute);
+    var node = $p(element).getAttributeNode(attribute);
     return !!(node && node.specified);
   }
 };
@@ -3105,7 +3105,7 @@ Element.Storage = {
 
 Element.addMethods({
   getStorage: function(element) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
 
     var uid;
     if (element === window) {
@@ -3123,7 +3123,7 @@ Element.addMethods({
   },
 
   store: function(element, key, value) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
 
     if (arguments.length === 2) {
       Element.getStorage(element).update(key);
@@ -3135,7 +3135,7 @@ Element.addMethods({
   },
 
   retrieve: function(element, key, defaultValue) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     var hash = Element.getStorage(element), value = hash.get(key);
 
     if (Object.isUndefined(value)) {
@@ -3147,7 +3147,7 @@ Element.addMethods({
   },
 
   clone: function(element, deep) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     var clone = element.cloneNode(deep);
     clone._prototypeUID = void 0;
     if (deep) {
@@ -3161,7 +3161,7 @@ Element.addMethods({
   },
 
   purge: function(element) {
-    if (!(element = $(element))) return;
+    if (!(element = $p(element))) return;
     var purgeElement = Element._purgeElement;
 
     purgeElement(element);
@@ -3231,9 +3231,9 @@ Element.addMethods({
         }
       } else {
         if (isHorizontal) {
-          whole = $(context).measure('width');
+          whole = $p(context).measure('width');
         } else if (isVertical) {
-          whole = $(context).measure('height');
+          whole = $p(context).measure('height');
         }
       }
 
@@ -3257,7 +3257,7 @@ Element.addMethods({
       if (display === 'none') {
         return false;
       }
-      element = $(element.parentNode);
+      element = $p(element.parentNode);
     }
     return true;
   }
@@ -3280,7 +3280,7 @@ Element.addMethods({
   Element.Layout = Class.create(Hash, {
     initialize: function($super, element, preCompute) {
       $super();
-      this.element = $(element);
+      this.element = $p(element);
 
       Element.Layout.PROPERTIES.each( function(property) {
         this._set(property, null);
@@ -3351,7 +3351,7 @@ Element.addMethods({
       } else if (position === 'absolute' || position === 'fixed') {
         newWidth = getPixelValue(element, 'width', context);
       } else {
-        var parent = element.parentNode, pLayout = $(parent).getLayout();
+        var parent = element.parentNode, pLayout = $p(parent).getLayout();
 
         newWidth = pLayout.get('width') -
          this.get('margin-left') -
@@ -3653,11 +3653,11 @@ Element.addMethods({
   }
 
   function measure(element, property) {
-    return $(element).getLayout().get(property);
+    return $p(element).getLayout().get(property);
   }
 
   function getDimensions(element) {
-    element = $(element);
+    element = $p(element);
     var display = Element.getStyle(element, 'display');
 
     if (display && display !== 'none') {
@@ -3692,26 +3692,26 @@ Element.addMethods({
   }
 
   function getOffsetParent(element) {
-    element = $(element);
+    element = $p(element);
 
     if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-      return $(document.body);
+      return $p(document.body);
 
     var isInline = (Element.getStyle(element, 'display') === 'inline');
-    if (!isInline && element.offsetParent) return $(element.offsetParent);
+    if (!isInline && element.offsetParent) return $p(element.offsetParent);
 
     while ((element = element.parentNode) && element !== document.body) {
       if (Element.getStyle(element, 'position') !== 'static') {
-        return isHtml(element) ? $(document.body) : $(element);
+        return isHtml(element) ? $p(document.body) : $p(element);
       }
     }
 
-    return $(document.body);
+    return $p(document.body);
   }
 
 
   function cumulativeOffset(element) {
-    element = $(element);
+    element = $p(element);
     var valueT = 0, valueL = 0;
     if (element.parentNode) {
       do {
@@ -3724,7 +3724,7 @@ Element.addMethods({
   }
 
   function positionedOffset(element) {
-    element = $(element);
+    element = $p(element);
 
     var layout = element.getLayout();
 
@@ -3757,7 +3757,7 @@ Element.addMethods({
   }
 
   function viewportOffset(forElement) {
-    element = $(element);
+    element = $p(element);
     var valueT = 0, valueL = 0, docBody = document.body;
 
     var element = forElement;
@@ -3779,7 +3779,7 @@ Element.addMethods({
   }
 
   function absolutize(element) {
-    element = $(element);
+    element = $p(element);
 
     if (Element.getStyle(element, 'position') === 'absolute') {
       return element;
@@ -3811,7 +3811,7 @@ Element.addMethods({
   }
 
   function relativize(element) {
-    element = $(element);
+    element = $p(element);
     if (Element.getStyle(element, 'position') === 'relative') {
       return element;
     }
@@ -3826,10 +3826,10 @@ Element.addMethods({
   if (Prototype.Browser.IE) {
     getOffsetParent = getOffsetParent.wrap(
       function(proceed, element) {
-        element = $(element);
+        element = $p(element);
 
         if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-          return $(document.body);
+          return $p(document.body);
 
         var position = element.getStyle('position');
         if (position !== 'static') return proceed(element);
@@ -3842,7 +3842,7 @@ Element.addMethods({
     );
 
     positionedOffset = positionedOffset.wrap(function(proceed, element) {
-      element = $(element);
+      element = $p(element);
       if (!element.parentNode) return new Element.Offset(0, 0);
       var position = element.getStyle('position');
       if (position !== 'static') return proceed(element);
@@ -3858,7 +3858,7 @@ Element.addMethods({
     });
   } else if (Prototype.Browser.Webkit) {
     cumulativeOffset = function(element) {
-      element = $(element);
+      element = $p(element);
       var valueT = 0, valueL = 0;
       do {
         valueT += element.offsetTop  || 0;
@@ -3907,7 +3907,7 @@ Element.addMethods({
   if ('getBoundingClientRect' in document.documentElement) {
     Element.addMethods({
       viewportOffset: function(element) {
-        element = $(element);
+        element = $p(element);
         if (isDetached(element)) return new Element.Offset(0, 0);
 
         var rect = element.getBoundingClientRect(),
@@ -4962,7 +4962,7 @@ delete Prototype._original_property;
 
 var Form = {
   reset: function(form) {
-    form = $(form);
+    form = $p(form);
     form.reset();
     return form;
   },
@@ -4990,7 +4990,7 @@ var Form = {
 
     return elements.inject(initial, function(result, element) {
       if (!element.disabled && element.name) {
-        key = element.name; value = $(element).getValue();
+        key = element.name; value = $p(element).getValue();
         if (value != null && element.type != 'file' && (element.type != 'submit' || (!submitted &&
             submit !== false && (!submit || key == submit) && (submitted = true)))) {
           result = accumulator(result, key, value);
@@ -5007,7 +5007,7 @@ Form.Methods = {
   },
 
   getElements: function(form) {
-    var elements = $(form).getElementsByTagName('*'),
+    var elements = $p(form).getElementsByTagName('*'),
         element,
         arr = [ ],
         serializers = Form.Element.Serializers;
@@ -5022,7 +5022,7 @@ Form.Methods = {
   },
 
   getInputs: function(form, typeName, name) {
-    form = $(form);
+    form = $p(form);
     var inputs = form.getElementsByTagName('input');
 
     if (!typeName && !name) return $A(inputs).map(Element.extend);
@@ -5038,19 +5038,19 @@ Form.Methods = {
   },
 
   disable: function(form) {
-    form = $(form);
+    form = $p(form);
     Form.getElements(form).invoke('disable');
     return form;
   },
 
   enable: function(form) {
-    form = $(form);
+    form = $p(form);
     Form.getElements(form).invoke('enable');
     return form;
   },
 
   findFirstElement: function(form) {
-    var elements = $(form).getElements().findAll(function(element) {
+    var elements = $p(form).getElements().findAll(function(element) {
       return 'hidden' != element.type && !element.disabled;
     });
     var firstByIndex = elements.findAll(function(element) {
@@ -5063,14 +5063,14 @@ Form.Methods = {
   },
 
   focusFirstElement: function(form) {
-    form = $(form);
+    form = $p(form);
     var element = form.findFirstElement();
     if (element) element.activate();
     return form;
   },
 
   request: function(form, options) {
-    form = $(form), options = Object.clone(options || { });
+    form = $p(form), options = Object.clone(options || { });
 
     var params = options.parameters, action = form.readAttribute('action') || '';
     if (action.blank()) action = window.location.href;
@@ -5093,12 +5093,12 @@ Form.Methods = {
 
 Form.Element = {
   focus: function(element) {
-    $(element).focus();
+    $p(element).focus();
     return element;
   },
 
   select: function(element) {
-    $(element).select();
+    $p(element).select();
     return element;
   }
 };
@@ -5106,7 +5106,7 @@ Form.Element = {
 Form.Element.Methods = {
 
   serialize: function(element) {
-    element = $(element);
+    element = $p(element);
     if (!element.disabled && element.name) {
       var value = element.getValue();
       if (value != undefined) {
@@ -5119,29 +5119,29 @@ Form.Element.Methods = {
   },
 
   getValue: function(element) {
-    element = $(element);
+    element = $p(element);
     var method = element.tagName.toLowerCase();
     return Form.Element.Serializers[method](element);
   },
 
   setValue: function(element, value) {
-    element = $(element);
+    element = $p(element);
     var method = element.tagName.toLowerCase();
     Form.Element.Serializers[method](element, value);
     return element;
   },
 
   clear: function(element) {
-    $(element).value = '';
+    $p(element).value = '';
     return element;
   },
 
   present: function(element) {
-    return $(element).value != '';
+    return $p(element).value != '';
   },
 
   activate: function(element) {
-    element = $(element);
+    element = $p(element);
     try {
       element.focus();
       if (element.select && (element.tagName.toLowerCase() != 'input' ||
@@ -5152,13 +5152,13 @@ Form.Element.Methods = {
   },
 
   disable: function(element) {
-    element = $(element);
+    element = $p(element);
     element.disabled = true;
     return element;
   },
 
   enable: function(element) {
-    element = $(element);
+    element = $p(element);
     element.disabled = false;
     return element;
   }
@@ -5250,7 +5250,7 @@ Form.Element.Serializers = (function() {
 Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
   initialize: function($super, element, frequency, callback) {
     $super(callback, frequency);
-    this.element   = $(element);
+    this.element   = $p(element);
     this.lastValue = this.getValue();
   },
 
@@ -5280,7 +5280,7 @@ Form.Observer = Class.create(Abstract.TimedObserver, {
 
 Abstract.EventObserver = Class.create({
   initialize: function(element, callback) {
-    this.element  = $(element);
+    this.element  = $p(element);
     this.callback = callback;
 
     this.lastValue = this.getValue();
@@ -5631,7 +5631,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function observe(element, eventName, handler) {
-    element = $(element);
+    element = $p(element);
 
     var responder = _createResponder(element, eventName, handler);
 
@@ -5657,7 +5657,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function stopObserving(element, eventName, handler) {
-    element = $(element);
+    element = $p(element);
 
     var registry = Element.retrieve(element, 'prototype_event_registry');
     if (!registry) return element;
@@ -5710,7 +5710,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function fire(element, eventName, memo, bubble) {
-    element = $(element);
+    element = $p(element);
 
     if (Object.isUndefined(bubble))
       bubble = true;
@@ -5740,7 +5740,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   Event.Handler = Class.create({
     initialize: function(element, eventName, selector, callback) {
-      this.element   = $(element);
+      this.element   = $p(element);
       this.eventName = eventName;
       this.selector  = selector;
       this.callback  = callback;
@@ -5764,7 +5764,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   });
 
   function on(element, eventName, selector, callback) {
-    element = $(element);
+    element = $p(element);
     if (Object.isFunction(selector) && Object.isUndefined(callback)) {
       callback = selector, selector = null;
     }
@@ -5971,7 +5971,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
     var elements = [], classNames = (/\s/.test(className) ? $w(className) : null);
     if (!classNames && !className) return elements;
 
-    var nodes = $(element).getElementsByTagName('*');
+    var nodes = $p(element).getElementsByTagName('*');
     className = ' ' + className + ' ';
 
     for (var i = 0, child, cn; child = nodes[i]; i++) {
@@ -5985,7 +5985,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
   };
 
   return function(className, parentElement) {
-    return $(parentElement || document.body).getElementsByClassName(className);
+    return $p(parentElement || document.body).getElementsByClassName(className);
   };
 }(Element.Methods);
 
@@ -5994,7 +5994,7 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
 Element.ClassNames = Class.create();
 Element.ClassNames.prototype = {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $p(element);
   },
 
   _each: function(iterator) {

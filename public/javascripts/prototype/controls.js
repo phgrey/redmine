@@ -42,9 +42,9 @@ if(typeof Effect == 'undefined')
 var Autocompleter = { };
 Autocompleter.Base = Class.create({
   baseInitialize: function(element, update, options) {
-    element          = $(element);
+    element          = $p(element);
     this.element     = element;
-    this.update      = $(update);
+    this.update      = $p(update);
     this.hasFocus    = false;
     this.changed     = false;
     this.active      = false;
@@ -100,7 +100,7 @@ Autocompleter.Base = Class.create({
        '<iframe id="' + this.update.id + '_iefix" '+
        'style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" ' +
        'src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
-      this.iefix = $(this.update.id+'_iefix');
+      this.iefix = $p(this.update.id+'_iefix');
     }
     if(this.iefix) setTimeout(this.fixIEOverlapping.bind(this), 50);
   },
@@ -242,7 +242,7 @@ Autocompleter.Base = Class.create({
     }
     var value = '';
     if (this.options.select) {
-      var nodes = $(selectedElement).select('.' + this.options.select) || [];
+      var nodes = $p(selectedElement).select('.' + this.options.select) || [];
       if(nodes.length>0) value = Element.collectTextNodes(nodes[0], this.options.select);
     } else
       value = Element.collectTextNodesIgnoreClass(selectedElement, 'informal');
@@ -481,18 +481,18 @@ Field.scrollFreeActivate = function(field) {
 Ajax.InPlaceEditor = Class.create({
   initialize: function(element, url, options) {
     this.url = url;
-    this.element = element = $(element);
+    this.element = element = $p(element);
     this.prepareOptions();
     this._controls = { };
     arguments.callee.dealWithDeprecatedOptions(options); // DEPRECATION LAYER!!!
     Object.extend(this.options, options || { });
     if (!this.options.formId && this.element.id) {
       this.options.formId = this.element.id + '-inplaceeditor';
-      if ($(this.options.formId))
+      if ($p(this.options.formId))
         this.options.formId = '';
     }
     if (this.options.externalControl)
-      this.options.externalControl = $(this.options.externalControl);
+      this.options.externalControl = $p(this.options.externalControl);
     if (!this.options.externalControl)
       this.options.externalControlOnly = false;
     this._originalBackground = this.element.getStyle('background-color') || 'transparent';
@@ -565,7 +565,7 @@ Ajax.InPlaceEditor = Class.create({
       if (!text || condition === false) return;
       ipe._form.appendChild(document.createTextNode(text));
     };
-    this._form = $(document.createElement('form'));
+    this._form = $p(document.createElement('form'));
     this._form.id = this.options.formId;
     this._form.addClassName(this.options.formClassName);
     this._form.onsubmit = this._boundSubmitHandler;
@@ -688,7 +688,7 @@ Ajax.InPlaceEditor = Class.create({
   postProcessEditField: function() {
     var fpc = this.options.fieldPostCreation;
     if (fpc)
-      $(this._controls.editor)['focus' == fpc ? 'focus' : 'activate']();
+      $p(this._controls.editor)['focus' == fpc ? 'focus' : 'activate']();
   },
   prepareOptions: function() {
     this.options = Object.clone(Ajax.InPlaceEditor.DefaultOptions);
@@ -946,7 +946,7 @@ Ajax.InPlaceCollectionEditor.DefaultOptions = {
 Form.Element.DelayedObserver = Class.create({
   initialize: function(element, delay, callback) {
     this.delay     = delay || 0.5;
-    this.element   = $(element);
+    this.element   = $p(element);
     this.callback  = callback;
     this.timer     = null;
     this.lastValue = $F(this.element);

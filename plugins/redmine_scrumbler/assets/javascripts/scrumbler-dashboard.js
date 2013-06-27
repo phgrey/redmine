@@ -290,7 +290,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 			// +
 			// public
 			this.getHeader    = $from(header);
-			this.getDashboard = $from($(dashboard));
+			this.getDashboard = $from($p(dashboard));
 			this.getConfig    = $from(config);
 			this.getStatuses  = $from(config.statuses);
 			this.getTrackers  = $from(config.trackers);

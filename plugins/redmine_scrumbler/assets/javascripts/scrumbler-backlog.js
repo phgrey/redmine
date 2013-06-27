@@ -47,7 +47,7 @@ Scrumbler.Backlog = (function() {
 		function formResponse(transport) {
 			var json = transport.responseJSON;
 			if (json && json.success) {
-				$(document).fire('issue:created', json.backlog);
+				$p(document).fire('issue:created', json.backlog);
 				splash_div.hide();
 			} else {
 				formRequest(transport);
@@ -90,7 +90,7 @@ Scrumbler.Backlog = (function() {
 			}));
 		}
 		
-		$(document.body).appendChild(splash_div);
+		$p(document.body).appendChild(splash_div);
 		main_link.observe('click', mainLinkClick);
 		
 		return main_link;
@@ -146,7 +146,7 @@ function get_width(max, count, el_size) {
  *		update_url: Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_backlogs/update_scrum_points'
  *	});
  * 
- *  editor.enableForElement($('some_div_id'), {"id" : some_issue_id});
+ *  editor.enableForElement($p('some_div_id'), {"id" : some_issue_id});
 **/
 var ScrumPointEditor = Class.create({
     initialize: function(config){
@@ -175,7 +175,7 @@ var ScrumPointEditor = Class.create({
             popup.appendChild(value_field);
         }.bind(this));
         
-        $(document).observe("click", function(event){
+        $p(document).observe("click", function(event){
         	if((event.target != popup) && popup.visible()){
         		popup.hide();
         	}
@@ -267,7 +267,7 @@ var IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 				alt: title,
 				'class': 'scrumbler-move-issue-priority'
 			});			
-			a.observe('click', function(event){ $(document).fire("issue:move_priority", config); });
+			a.observe('click', function(event){ $p(document).fire("issue:move_priority", config); });
 			move_actions.appendChild(a);		
 		};
 		
@@ -302,7 +302,7 @@ var MoveIssuePriorityRequest = Class.create(Ajax.Request, {
 					var resp = transport.responseJSON;
 					
 					if(resp.success) {
-						$(document).fire('issue:moved',{
+						$p(document).fire('issue:moved',{
 							backlog: resp.backlog,
 							sprint: resp.sprint
 						});
@@ -673,7 +673,7 @@ var MoveIssue = Class.create(Ajax.Request, {
 				onSuccess : function(transport) { 
 					var resp = transport.responseJSON;
 					if(resp.success) {
-						$(document).fire('issue:moved',{
+						$p(document).fire('issue:moved',{
 							backlog: resp.backlog,
 							sprint: resp.sprint
 						});
@@ -731,18 +731,18 @@ return Class.create({
 		}.bind(this));
 
 		// Update backlog on issue creation
-		$(document).observe("issue:created", function(event) {
+		$p(document).observe("issue:created", function(event) {
 			var backlog = event.memo;
 			this.updateBacklog(backlog);
 		}.bind(this));
 
 		// Update backlog on issue movement
-		$(document).observe("issue:moved", function(event){
+		$p(document).observe("issue:moved", function(event){
 			var config = event.memo;
 			this.update(config);
 		}.bind(this));
 		
-		$(document).observe("issue:move_priority", function(event){
+		$p(document).observe("issue:move_priority", function(event){
 			var config = event.memo;
 			new MoveIssuePriorityRequest({
 				project_id:this.config.project_id,

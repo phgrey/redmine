@@ -28,14 +28,14 @@ String.prototype.parseColor = function() {
 /*--------------------------------------------------------------------------*/
 
 Element.collectTextNodes = function(element) {
-  return $A($(element).childNodes).collect( function(node) {
+  return $A($p(element).childNodes).collect( function(node) {
     return (node.nodeType==3 ? node.nodeValue :
       (node.hasChildNodes() ? Element.collectTextNodes(node) : ''));
   }).flatten().join('');
 };
 
 Element.collectTextNodesIgnoreClass = function(element, className) {
-  return $A($(element).childNodes).collect( function(node) {
+  return $A($p(element).childNodes).collect( function(node) {
     return (node.nodeType==3 ? node.nodeValue :
       ((node.hasChildNodes() && !Element.hasClassName(node,className)) ?
         Element.collectTextNodesIgnoreClass(node, className) : ''));
@@ -43,19 +43,19 @@ Element.collectTextNodesIgnoreClass = function(element, className) {
 };
 
 Element.setContentZoom = function(element, percent) {
-  element = $(element);
+  element = $p(element);
   element.setStyle({fontSize: (percent/100) + 'em'});
   if (Prototype.Browser.WebKit) window.scrollBy(0,0);
   return element;
 };
 
 Element.getInlineOpacity = function(element){
-  return $(element).style.opacity || '';
+  return $p(element).style.opacity || '';
 };
 
 Element.forceRerendering = function(element) {
   try {
-    element = $(element);
+    element = $p(element);
     var n = document.createTextNode(' ');
     element.appendChild(n);
     element.removeChild(n);
@@ -110,7 +110,7 @@ var Effect = {
     var tagifyStyle = 'position:relative';
     if (Prototype.Browser.IE) tagifyStyle += ';zoom:1';
 
-    element = $(element);
+    element = $p(element);
     $A(element.childNodes).each( function(child) {
       if (child.nodeType==3) {
         child.nodeValue.toArray().each( function(character) {
@@ -130,7 +130,7 @@ var Effect = {
        (element.length))
       elements = element;
     else
-      elements = $(element).childNodes;
+      elements = $p(element).childNodes;
 
     var options = Object.extend({
       speed: 0.1,
@@ -148,7 +148,7 @@ var Effect = {
     'appear': ['Appear','Fade']
   },
   toggle: function(element, effect, options) {
-    element = $(element);
+    element = $p(element);
     effect  = (effect || 'appear').toLowerCase();
 
     return Effect[ Effect.PAIRS[ effect ][ element.visible() ? 1 : 0 ] ](element, Object.extend({
@@ -326,7 +326,7 @@ Effect.Parallel = Class.create(Effect.Base, {
 
 Effect.Tween = Class.create(Effect.Base, {
   initialize: function(object, from, to) {
-    object = Object.isString(object) ? $(object) : object;
+    object = Object.isString(object) ? $p(object) : object;
     var args = $A(arguments), method = args.last(),
       options = args.length == 5 ? args[3] : null;
     this.method = Object.isFunction(method) ? method.bind(object) :
@@ -348,7 +348,7 @@ Effect.Event = Class.create(Effect.Base, {
 
 Effect.Opacity = Class.create(Effect.Base, {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $p(element);
     if (!this.element) throw(Effect._elementDoesNotExistError);
     // make this work on IE on elements without 'layout'
     if (Prototype.Browser.IE && (!this.element.currentStyle.hasLayout))
@@ -366,7 +366,7 @@ Effect.Opacity = Class.create(Effect.Base, {
 
 Effect.Move = Class.create(Effect.Base, {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $p(element);
     if (!this.element) throw(Effect._elementDoesNotExistError);
     var options = Object.extend({
       x:    0,
@@ -400,7 +400,7 @@ Effect.MoveBy = function(element, toTop, toLeft) {
 
 Effect.Scale = Class.create(Effect.Base, {
   initialize: function(element, percent) {
-    this.element = $(element);
+    this.element = $p(element);
     if (!this.element) throw(Effect._elementDoesNotExistError);
     var options = Object.extend({
       scaleX: true,
@@ -474,7 +474,7 @@ Effect.Scale = Class.create(Effect.Base, {
 
 Effect.Highlight = Class.create(Effect.Base, {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $p(element);
     if (!this.element) throw(Effect._elementDoesNotExistError);
     var options = Object.extend({ startcolor: '#ffff99' }, arguments[1] || { });
     this.start(options);
@@ -510,7 +510,7 @@ Effect.Highlight = Class.create(Effect.Base, {
 Effect.ScrollTo = function(element) {
   var options = arguments[1] || { },
   scrollOffsets = document.viewport.getScrollOffsets(),
-  elementOffsets = $(element).cumulativeOffset();
+  elementOffsets = $p(element).cumulativeOffset();
 
   if (options.offset) elementOffsets[1] += options.offset;
 
@@ -525,7 +525,7 @@ Effect.ScrollTo = function(element) {
 /* ------------- combination effects ------------- */
 
 Effect.Fade = function(element) {
-  element = $(element);
+  element = $p(element);
   var oldOpacity = element.getInlineOpacity();
   var options = Object.extend({
     from: element.getOpacity() || 1.0,
@@ -539,7 +539,7 @@ Effect.Fade = function(element) {
 };
 
 Effect.Appear = function(element) {
-  element = $(element);
+  element = $p(element);
   var options = Object.extend({
   from: (element.getStyle('display') == 'none' ? 0.0 : element.getOpacity() || 0.0),
   to:   1.0,
@@ -554,7 +554,7 @@ Effect.Appear = function(element) {
 };
 
 Effect.Puff = function(element) {
-  element = $(element);
+  element = $p(element);
   var oldStyle = {
     opacity: element.getInlineOpacity(),
     position: element.getStyle('position'),
@@ -578,7 +578,7 @@ Effect.Puff = function(element) {
 };
 
 Effect.BlindUp = function(element) {
-  element = $(element);
+  element = $p(element);
   element.makeClipping();
   return new Effect.Scale(element, 0,
     Object.extend({ scaleContent: false,
@@ -592,7 +592,7 @@ Effect.BlindUp = function(element) {
 };
 
 Effect.BlindDown = function(element) {
-  element = $(element);
+  element = $p(element);
   var elementDimensions = element.getDimensions();
   return new Effect.Scale(element, 100, Object.extend({
     scaleContent: false,
@@ -610,7 +610,7 @@ Effect.BlindDown = function(element) {
 };
 
 Effect.SwitchOff = function(element) {
-  element = $(element);
+  element = $p(element);
   var oldOpacity = element.getInlineOpacity();
   return new Effect.Appear(element, Object.extend({
     duration: 0.4,
@@ -632,7 +632,7 @@ Effect.SwitchOff = function(element) {
 };
 
 Effect.DropOut = function(element) {
-  element = $(element);
+  element = $p(element);
   var oldStyle = {
     top: element.getStyle('top'),
     left: element.getStyle('left'),
@@ -652,7 +652,7 @@ Effect.DropOut = function(element) {
 };
 
 Effect.Shake = function(element) {
-  element = $(element);
+  element = $p(element);
   var options = Object.extend({
     distance: 20,
     duration: 0.5
@@ -679,7 +679,7 @@ Effect.Shake = function(element) {
 };
 
 Effect.SlideDown = function(element) {
-  element = $(element).cleanWhitespace();
+  element = $p(element).cleanWhitespace();
   // SlideDown need to have the content of the element wrapped in a container element with fixed height!
   var oldInnerBottom = element.down().getStyle('bottom');
   var elementDimensions = element.getDimensions();
@@ -707,7 +707,7 @@ Effect.SlideDown = function(element) {
 };
 
 Effect.SlideUp = function(element) {
-  element = $(element).cleanWhitespace();
+  element = $p(element).cleanWhitespace();
   var oldInnerBottom = element.down().getStyle('bottom');
   var elementDimensions = element.getDimensions();
   return new Effect.Scale(element, window.opera ? 0 : 1,
@@ -749,7 +749,7 @@ Effect.Squish = function(element) {
 };
 
 Effect.Grow = function(element) {
-  element = $(element);
+  element = $p(element);
   var options = Object.extend({
     direction: 'center',
     moveTransition: Effect.Transitions.sinoidal,
@@ -823,7 +823,7 @@ Effect.Grow = function(element) {
 };
 
 Effect.Shrink = function(element) {
-  element = $(element);
+  element = $p(element);
   var options = Object.extend({
     direction: 'center',
     moveTransition: Effect.Transitions.sinoidal,
@@ -877,7 +877,7 @@ Effect.Shrink = function(element) {
 };
 
 Effect.Pulsate = function(element) {
-  element = $(element);
+  element = $p(element);
   var options    = arguments[1] || { },
     oldOpacity = element.getInlineOpacity(),
     transition = options.transition || Effect.Transitions.linear,
@@ -892,7 +892,7 @@ Effect.Pulsate = function(element) {
 };
 
 Effect.Fold = function(element) {
-  element = $(element);
+  element = $p(element);
   var oldStyle = {
     top: element.style.top,
     left: element.style.left,
@@ -914,7 +914,7 @@ Effect.Fold = function(element) {
 
 Effect.Morph = Class.create(Effect.Base, {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = $p(element);
     if (!this.element) throw(Effect._elementDoesNotExistError);
     var options = Object.extend({
       style: { }
@@ -1024,7 +1024,7 @@ Effect.Transform = Class.create({
     return new Effect.Parallel(
       this.tracks.map(function(track){
         var ids = track.get('ids'), effect = track.get('effect'), options = track.get('options');
-        var elements = [$(ids) || $$(ids)].flatten();
+        var elements = [$p(ids) || $$(ids)].flatten();
         return elements.map(function(e){ return new effect(e, Object.extend({ sync:true }, options)) });
       }).flatten(),
       this.options
@@ -1067,7 +1067,7 @@ String.prototype.parseStyle = function(){
 
 if (document.defaultView && document.defaultView.getComputedStyle) {
   Element.getStyles = function(element) {
-    var css = document.defaultView.getComputedStyle($(element), null);
+    var css = document.defaultView.getComputedStyle($p(element), null);
     return Element.CSS_PROPERTIES.inject({ }, function(styles, property) {
       styles[property] = css[property];
       return styles;
@@ -1075,7 +1075,7 @@ if (document.defaultView && document.defaultView.getComputedStyle) {
   };
 } else {
   Element.getStyles = function(element) {
-    element = $(element);
+    element = $p(element);
     var css = element.currentStyle, styles;
     styles = Element.CSS_PROPERTIES.inject({ }, function(results, property) {
       results[property] = css[property];
@@ -1088,18 +1088,18 @@ if (document.defaultView && document.defaultView.getComputedStyle) {
 
 Effect.Methods = {
   morph: function(element, style) {
-    element = $(element);
+    element = $p(element);
     new Effect.Morph(element, Object.extend({ style: style }, arguments[2] || { }));
     return element;
   },
   visualEffect: function(element, effect, options) {
-    element = $(element);
+    element = $p(element);
     var s = effect.dasherize().camelize(), klass = s.charAt(0).toUpperCase() + s.substring(1);
     new Effect[klass](element, options);
     return element;
   },
   highlight: function(element, options) {
-    element = $(element);
+    element = $p(element);
     new Effect.Highlight(element, options);
     return element;
   }
@@ -1109,7 +1109,7 @@ $w('fade appear grow shrink fold blindUp blindDown slideUp slideDown '+
   'pulsate shake puff squish switchOff dropOut').each(
   function(effect) {
     Effect.Methods[effect] = function(element, options){
-      element = $(element);
+      element = $p(element);
       Effect[effect.charAt(0).toUpperCase() + effect.substring(1)](element, options);
       return element;
     };

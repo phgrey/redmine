@@ -103,7 +103,7 @@ module ScrumblerBacklogsHelper
   end
 
   def backlog_issues
-    javascript_tag("$('content').appendChild(new Scrumbler.Backlog(#{prepare_backlogs_data_to_json(@project).to_json}).el);")
+    javascript_tag("$p('content').appendChild(new Scrumbler.Backlog(#{prepare_backlogs_data_to_json(@project).to_json}).el);")
   end
 
 end

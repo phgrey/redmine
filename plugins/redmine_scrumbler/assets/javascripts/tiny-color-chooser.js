@@ -11,14 +11,14 @@ var TinyColorChooser = Class.create({
         }, options);
         
         
-        var input_filed = $(input_id);
+        var input_filed = $p(input_id);
    
         input_filed.value = input_filed.value || this.options.default_color
         var preview = this.createPreview(input_filed, this.options);
         
         var chooser = this.createPopup(input_filed, preview, this.options);
         
-        $(document).observe("click", function(event){
+        $p(document).observe("click", function(event){
      
             if(preview != event.target){
                 
